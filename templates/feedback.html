@@ -1,0 +1,18 @@
+{%extends 'layout.html'%}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='feedback.css') }}">
+{% endblock %}
+{%block content%}
+
+<div class="feedback-form-container">
+    <h1 class="mb-4">Feedback</h1>
+    <form action="" method="POST">
+        <div class="form-group">
+            <label for="feedback">Feedback</label>
+            <textarea class="form-control" id="feedback" name="feedback" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Submit</button>
+    </form>
+</div>
+
+{%endblock content%} 

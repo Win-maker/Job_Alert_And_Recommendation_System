@@ -1,0 +1,76 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+    {% for job_offer in job_offers.items %}
+    <article class="media content-section">
+        <div class="media-body">
+            <div class="article-metadata d-flex justify-content-between align-items-center">
+                <p class="mr-2 text-primary">{{ job_offer.username }}</p>
+                <small class="text-muted">{{ job_offer.created_date }}</small>
+            </div>
+            <h3>We are hiring {{ job_offer.job_title }}</h3>
+            <p><strong>Job Type:</strong> {{ job_offer.type }}</p>
+            <p><strong>Salary:</strong> {{ job_offer.salary }}</p>
+
+            <a class="see-more-link text-decoration-none" data-bs-toggle="collapse" href="#details{{ job_offer.post_id }}" role="button" aria-expanded="false" aria-controls="details{{ job_offer.post_id }}">See More</a>
+            <div class="collapse" id="details{{ job_offer.post_id }}">
+                <div>
+                    <p><strong>Age:</strong> {{ job_offer.age }}</p>
+                    <p><strong>Gender:</strong> {{ job_offer.gender }}</p>
+                    <p><strong>Job Type:</strong> {{ job_offer.type }}</p>
+                    <p><strong>Skills:</strong> {{ job_offer.skill_requirement }}</p>    
+                    <p><strong>Job Description:</strong> {{ job_offer.description }}</p>
+                    <i>You can ask with <strong>{{ job_offer.phone }}</strong></i>
+                    <br><br>
+                    <p>If you are interested, you can apply with your CV to our email: 
+                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to={{ job_offer.email }}&su=Job Application: {{ job_offer.job_title }}&body=Hello," target="_blank">{{ job_offer.email }}</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </article>
+    {% endfor %}
+
+
+    <div class="pagination" style="display: flex; justify-content: center;">
+        <!-- Previous button -->
+        {% if job_offers.has_prev %}
+            <a class="btn text-white mb-4" href="{{ url_for('latest_job_offers', page=job_offers.prev_num) }}" style="background-color:#125394;">Previous</a>
+        {% else %}
+            <span class="btn text-white mb-4 disabled" style="background-color:#125394;">Previous</span>
+        {% endif %}
+        
+        <!-- Page numbers with ellipses -->
+        {% for page_num in job_offers.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+            {% if page_num %}
+                {% if page_num == job_offers.page %}
+                    <a class="btn text-white mb-4 ml-2" href="{{ url_for('latest_job_offers', page=page_num) }}" style="background-color:#125394;">{{ page_num }}</a>
+                {% else %}
+                    <a class="btn mb-4 text-white ml-2" href="{{ url_for('latest_job_offers', page=page_num) }}">{{ page_num }}</a>
+                {% endif %}
+            {% else %}
+                <span class="btn btn-outline-secondary mb-4 disabled text-white">......</span>
+            {% endif %}
+        {% endfor %}
+        
+        <!-- Next button -->
+        {% if job_offers.has_next %}
+            <a class="btn mb-4 text-white" href="{{ url_for('latest_job_offers', page=job_offers.next_num) }}" style="background-color:#125394;">Next</a>
+        {% else %}
+            <span class="btn text-white mb-4 disabled" style="background-color:#125394;">Next</span>
+        {% endif %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var seeMoreLinks = document.querySelectorAll('.see-more-link');
+            seeMoreLinks.forEach(function(link) {
+                link.addEventListener('click', function() {
+                    this.style.display = 'none';
+                });
+            });
+        });
+    </script>
+
+{% endblock content %}

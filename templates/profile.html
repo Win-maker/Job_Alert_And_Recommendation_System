@@ -1,0 +1,80 @@
+{%extends 'layout.html'%}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='setupprofile.css') }}">
+{% endblock %}
+{% block content %}
+<div class="row vh-100">
+    <div class="col">
+        <div class="container">
+            <a href="submitPost"><button class="btn btn-primary mt-1">Create Post</button></a>
+            <a href="setprofile"><button class="btn btn-primary mt-1">Set Up Profile</button></a>
+
+
+ <!-- Your Alerts Button -->
+<button type="button" class="btn btn-primary mt-1" data-bs-toggle="modal" data-bs-target="#jobAlertsModal">
+    Your Alerts
+</button>
+
+<!-- Job Alerts Modal -->
+<div class="modal fade" id="jobAlertsModal" tabindex="-1" aria-labelledby="jobAlertsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="jobAlertsModalLabel">Job Alerts</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% if alerts %}
+                    {% for alert in alerts %}
+                    <div>
+                        <button type="button" class="btn btn-secondary mb-2" data-bs-toggle="modal" data-bs-target="#alertModal{{ alert.job_alert_id }}">
+                            {{ alert.job_title }}
+                        </button>
+                        <!-- Individual Alert Modal -->
+                        <div class="modal fade" id="alertModal{{ alert.job_alert_id }}" tabindex="-1" aria-labelledby="alertModalLabel{{ alert.job_alert_id }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="alertModalLabel{{ alert.job_alert_id }}">{{ alert.job_title }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Job Type : {{ alert.job_type }}</p>
+                                        <p>Location : {{ alert.location }}</p>
+                                        <p>Salary : {{ alert.salary }}</p>
+                                        <a href="{{ url_for('editJobAlert', job_alert_id=alert.job_alert_id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                        <form action="{{ url_for('deleteJobAlert', job_alert_id=alert.job_alert_id) }}" method="POST" style="display:inline;">
+                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No job alerts found. <a href="{{ url_for('submitJobAlert') }}">Set Your Job Alert</a></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+          <script>
+              document.addEventListener('DOMContentLoaded', function () {
+                  const form = document.getElementById('setupProfileForm');
+                  form.addEventListener('submit', function (e) {
+                      e.preventDefault();
+                      alert('Profile setup form submitted!');
+                      const modal = new bootstrap.Modal(document.getElementById('setupProfileModal'));
+                      modal.hide();
+                  });
+              });
+          </script>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+

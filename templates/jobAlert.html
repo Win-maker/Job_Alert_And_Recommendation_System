@@ -1,0 +1,30 @@
+{%extends 'layout.html'%}
+{%block content%}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='jobAlert.css') }}">
+{% endblock %}
+<div class="jobalert-form-container">
+    <h3 class="mb-4 text-center text-white py-2"  style="background: linear-gradient(to right, #3792c0, #003366);">Alert Your Job</h3>
+    <form action="/submitJobAlert" method="POST">
+        <div class="form-group">
+            <label for="job_title">Job Title</label>
+            <input type="type" class="form-control" id="job_title" name="job_title"  required>
+        </div>
+        <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" class="form-control" id="location" name="location" required>
+        </div>
+        <div class="form-group">
+            <label for="job_type">Job Type</label>
+            <input type="text" class="form-control" id="job_type" name="job_type" required></>
+        </div>
+
+        <div class="form-group">
+            <label for="salary">Salary</label>
+            <input type="text" class="form-control" id="salary" name="salary" required></>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-2">Set Alert</button>
+    </form>
+</div>
+{%endblock content%} 
