@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="mb-4">
+    <a href="manage_users"><button class="btn btn-primary mt-1">Manage Users</button></a>
+    <a href="manage_job_alerts"><button class="btn btn-primary mt-1">Manage Job Alerts</button></a>
+    <a href="manage_reviews"><button class="btn btn-primary mt-1">Manage Reviews</button></a>
+    
+</div>
+    <table class="table table-striped text-white">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Job Title</th>
+                <th>Location</th>
+                <th>Salary</th>
+                <th>Deadline</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for job_post in job_posts %}
+            <tr class="text-white">
+                <td class="text-white">{{ job_post.post_id }}</td>
+                <td class="text-white">{{ job_post.username }}</td>
+                <td class="text-white">{{ job_post.job_title }}</td>
+                <td class="text-white">{{ job_post.location }}</td>
+                <td class="text-white">{{ job_post.salary }}</td>
+                <td class="text-white">{{ job_post.deadline }}</td>
+                <td>
+                    <form action="{{ url_for('delete_job_post', post_id=job_post.post_id) }}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

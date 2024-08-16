@@ -1,0 +1,38 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div class="mb-4">
+        <a href="manage_users"><button class="btn btn-primary mt-1">Manage Users</button></a>
+        <a href="manage_job_offer_posts"><button class="btn btn-primary mt-1">Manage Job Offer Posts</button></a>
+        <a href="manage_reviews"><button class="btn btn-primary mt-1">Manage Reviews</button></a>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Job Title</th>
+                <th>Location</th>
+                <th>Job Type</th>
+                <th>Salary</th>
+                <th>User Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for job_alert in job_alerts %}
+            <tr>
+                <td>{{ job_alert.job_alert_id }}</td>
+                <td>{{ job_alert.job_title }}</td>
+                <td>{{ job_alert.location }}</td>
+                <td>{{ job_alert.job_type }}</td>
+                <td>{{ job_alert.salary }}</td>
+                <td>{{ job_alert.user_email }}</td>
+                <td>
+                    <form action="{{ url_for('delete_job_alert', job_alert_id=job_alert.job_alert_id) }}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

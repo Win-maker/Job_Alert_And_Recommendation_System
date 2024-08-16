@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Job Recommendations</title>
+    <!-- Add Bootstrap CSS or your own styles here -->
+</head>
+<body>
+    {% extends 'layout.html' %}
+
+    {% block content %}
+    <ul>
+        {% for job in jobs %}
+        <article class="media content-section">
+            <div class="media-body">
+                <div class="article-metadata d-flex justify-content-between align-items-center">
+                    <p class="mr-2 text-primary">{{ job.username }}</p>
+                    <small class="text-muted">{{ job.created_date }}</small>
+                </div>
+                <h3>We are hiring {{ job.job_title }}</h3>
+                <p><strong>Job Type:</strong> {{ job.type }}</p>
+                <p><strong>Salary:</strong> {{ job.salary }}</p>
+
+                <a class="see-more-link text-decoration-none" data-bs-toggle="collapse" href="#details{{ job.post_id }}" role="button" aria-expanded="false" aria-controls="details{{ job.post_id }}">See More</a>
+                <div class="collapse" id="details{{ job.post_id }}">
+                    <div>
+                        <p><strong>Age:</strong> {{ job.age }}</p>
+                        <p><strong>Gender:</strong> {{ job.gender }}</p>
+                        <p><strong>Job Type:</strong> {{ job.type }}</p>
+                        <p><strong>Skills:</strong> {{ job.skill_requirement }}</p>    
+                        <p><strong>Job Description:</strong> {{ job.description }}</p>
+                        <i>You can ask with <strong>{{ job.phone }}</strong></i>
+                        <br><br>
+                        <p>If you are interested, you can apply with your CV to our email: 
+                            <a href="https://mail.google.com/mail/?view=cm&fs=1&to={{ job.email }}&su=Job Application: {{ job.job_title }}&body=Hello," target="_blank">{{ job.email }}</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+
+        <!-- Pagination Controls -->
+        <div class="pagination" style="display: flex; justify-content: center;">
+            <!-- Previous button -->
+            {% if page > 1 %}
+                <a class="btn text-white mb-4" href="{{ url_for('show_recommendations', page=page-1) }}" style="background-color:#125394;">Previous</a>
+            {% else %}
+                <span class="btn text-white mb-4 disabled" style="background-color:#125394;">Previous</span>
+            {% endif %}
+            
+            <!-- Page numbers with ellipses -->
+            {% for page_num in range(1, total_pages + 1) %}
+                {% if page_num == page %}
+                    <a class="btn text-white mb-4 ml-2" href="{{ url_for('show_recommendations', page=page_num) }}" style="background-color:#125394;">{{ page_num }}</a>
+                {% else %}
+                    <a class="btn mb-4 text-white ml-2" href="{{ url_for('show_recommendations', page=page_num) }}">{{ page_num }}</a>
+                {% endif %}
+            {% endfor %}
+            
+            <!-- Next button -->
+            {% if page < total_pages %}
+                <a class="btn mb-4 text-white" href="{{ url_for('show_recommendations', page=page+1) }}" style="background-color:#125394;">Next</a>
+            {% else %}
+                <span class="btn text-white mb-4 disabled" style="background-color:#125394;">Next</span>
+            {% endif %}
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var seeMoreLinks = document.querySelectorAll('.see-more-link');
+                seeMoreLinks.forEach(function(link) {
+                    link.addEventListener('click', function() {
+                        this.style.display = 'none';
+                    });
+                });
+            });
+        </script>
+
+    {% endblock content %}
+</body>
+</html>
