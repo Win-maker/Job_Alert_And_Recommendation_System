@@ -18,7 +18,6 @@
         <title>Job Portal</title>
     {% endif %}
 
-
 </head>
 <body>
     <header class="site-header">
@@ -32,13 +31,18 @@
             <div class="navbar-nav mr-auto">
               <a class="nav-item nav-link" href="/home">Job Offers</a>
               <a class="nav-item nav-link" href="/about">About</a>
-              <a class="nav-item nav-link" href="/submitFeedback">Feedback</a>
+              {% if not session.get('admin_logged_in') %}
+                <a class="nav-item nav-link" href="/submitFeedback">Feedback</a>
+              {% endif %}
             </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
-              {% if session.get('admin_logged_in') or session.get('user_logged_in') %}
+              {% if session.get('admin_logged_in') %}
+                <a class="nav-item nav-link" href="/admin">Manage</a>
                 <a class="nav-item nav-link" href="/logout">Logout</a>
+              {% elif session.get('user_logged_in') %}
                 <a class="nav-item nav-link" href="/profile">Profile</a>
+                <a class="nav-item nav-link" href="/logout">Logout</a>
               {% else %}
                 <a class="nav-item nav-link" href="/login">Login</a>
                 <a class="nav-item nav-link" href="/register">Register</a>
@@ -53,22 +57,24 @@
         <div class="col-md-8">
           {% block content %}{% endblock %}
         </div>
-        <div class="col-md-4 mt-2">
-          <div class="content-section">
-            <h3 style="color:black">Our Sidebar</h3>
-            <p class='text-muted'>You can put any information here you'd like.
-              <ul class="list-group">
-                {% if session.get('admin_logged_in') or session.get('user_logged_in') %}
-                  <li class="list-group-item list-group-item-light "><a class="text-decoration-none" href="{{ url_for('latest_job_offers') }}">Latest Job Offers</a></li>
-                  <li class="list-group-item list-group-item-light "><a class="text-decoration-none" href=''>Recommendations</a></li>
-                  <li class="list-group-item list-group-item-light "><a class="text-decoration-none" href="{{url_for('submitJobAlert')}}">Job Alert</a></li>
-                {% else %}
-                  <li class="list-group-item list-group-item-light"><a class="text-decoration-none" href=''>Latest Job Offers</a></li>
-                {% endif %}
-              </ul>
-            </p>
+        {% if not session.get('admin_logged_in') %}
+          <div class="col-md-4 mt-2">
+            <div class="content-section">
+              <h3 style="color:black">Our Sidebar</h3>
+              <p class='text-muted'>You can put any information here you'd like.
+                <ul class="list-group">
+                  {% if session.get('is_employee') %}
+                    <li class="list-group-item list-group-item-light"><a class="text-decoration-none" href="{{ url_for('latest_job_offers') }}">Latest Job Offers</a></li>
+                    <li class="list-group-item list-group-item-light"><a class="text-decoration-none" href="{{ url_for('show_recommendations') }}">Your Recommended Jobs</a></li>
+                    <li class="list-group-item list-group-item-light"><a class="text-decoration-none" href="{{ url_for('submitJobAlert') }}">Job Alert</a></li>
+                  {% else %}
+                    <li class="list-group-item list-group-item-light"><a class="text-decoration-none" href="{{ url_for('latest_job_offers') }}">Latest Job Offers</a></li>
+                  {% endif %}
+                </ul>
+              </p>
+            </div>
           </div>
-        </div>
+        {% endif %}
       </div>
     </main>
 
